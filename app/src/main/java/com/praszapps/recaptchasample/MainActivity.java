@@ -12,6 +12,9 @@ import com.google.android.gms.safetynet.SafetyNetApi;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -40,13 +43,6 @@ public class MainActivity extends AppCompatActivity {
                 .addOnFailureListener(mFailureListener);
     }
 
-    private RecaptchaVerifyRequest getRequest(String userResponseToken) {
-        RecaptchaVerifyRequest recaptchaVerifyRequest = new RecaptchaVerifyRequest();
-        recaptchaVerifyRequest.setResponse(userResponseToken);
-        recaptchaVerifyRequest.setSecret(PVT_KEY);
-        return recaptchaVerifyRequest;
-    }
-
     private RecaptchaAPI getService() {
         return getRetrofit().create(RecaptchaAPI.class);
     }
@@ -71,9 +67,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void retrofitServiceCall(String userResponseToken) {
         RecaptchaAPI service = getService();
-        RecaptchaVerifyRequest recaptchaVerifyRequest = getRequest(userResponseToken);
 
-        Call<RecaptchaVerifyResponse> recaptchaVerifyResponseCall = service.verifyResponse(recaptchaVerifyRequest);
+        Map<String, String> params = new HashMap<>();
+        params.put("response", userResponseToken);
+        params.put("secret", PVT_KEY);
+
+        Call<RecaptchaVerifyResponse> recaptchaVerifyResponseCall = service.verifyResponse(params);
         recaptchaVerifyResponseCall.enqueue(mApiResponseCall);
     }
 
@@ -86,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
                 String userResponseToken = recaptchaTokenResponse.getTokenResult();
                 if (!userResponseToken.isEmpty()) {
                     retrofitServiceCall(userResponseToken);
-
                 }
             }
         }

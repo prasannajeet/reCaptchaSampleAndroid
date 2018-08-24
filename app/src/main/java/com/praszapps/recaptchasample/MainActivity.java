@@ -108,15 +108,18 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onResponse(Call<RecaptchaVerifyResponse> call, Response<RecaptchaVerifyResponse> response) {
             if (response.body().isSuccess()) {
+                Log.d("", "SUCCESS!!!");
                 Toast.makeText(MainActivity.this, "SUCCESS!!!", Toast.LENGTH_SHORT).show();
             } else {
+                Log.d("", "FAILED!!!");
                 Toast.makeText(MainActivity.this, "FAILED!!!", Toast.LENGTH_SHORT).show();
             }
         }
 
         @Override
         public void onFailure(Call<RecaptchaVerifyResponse> call, Throwable t) {
-            Toast.makeText(MainActivity.this, "NOT DONE!!!!", Toast.LENGTH_SHORT).show();
+            Log.e("", t.getMessage());
+            Log.e("", call.toString());
         }
     }
 }

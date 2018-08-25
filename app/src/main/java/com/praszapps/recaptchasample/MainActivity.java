@@ -1,12 +1,12 @@
 package com.praszapps.recaptchasample;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.Button;
 
-import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.safetynet.SafetyNet;
 import com.google.android.gms.safetynet.SafetyNetApi;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -32,15 +32,21 @@ public class MainActivity extends AppCompatActivity {
     private FailureListener mFailureListener = new FailureListener();
     private ApiResponseCall mApiResponseCall = new ApiResponseCall();
 
+    private Button reCaptchaButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        SafetyNet.getClient(this).verifyWithRecaptcha(SITE_KEY)
-                .addOnSuccessListener(mSuccessListener)
-                .addOnFailureListener(mFailureListener);
+        reCaptchaButton = findViewById(R.id.button);
+        reCaptchaButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SafetyNet.getClient(MainActivity.this).verifyWithRecaptcha(SITE_KEY)
+                        .addOnSuccessListener(mSuccessListener)
+                        .addOnFailureListener(mFailureListener);
+            }
+        });
     }
 
     private RecaptchaAPI getService() {
@@ -90,17 +96,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void showDialog(String title, String message) {
+        new AlertDialog.Builder(this).setTitle(title).setMessage(message).setPositiveButton("Well now ain't that nice!", null).create().show();
+    }
+
     private class FailureListener implements OnFailureListener {
 
         @Override
         public void onFailure(@NonNull Exception e) {
-            if (e instanceof ApiException) {
-                ApiException apiException = (ApiException) e;
-                int statusCode = apiException.getStatusCode();
-            } else {
-                // A unknown type of error occurred.
-                Log.d("", "Error: " + e.getMessage());
-            }
+            showDialog("Obie is Unknown", e.getLocalizedMessage());
         }
     }
 
@@ -108,18 +112,16 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onResponse(Call<RecaptchaVerifyResponse> call, Response<RecaptchaVerifyResponse> response) {
             if (response.body().isSuccess()) {
-                Log.d("", "SUCCESS!!!");
-                Toast.makeText(MainActivity.this, "SUCCESS!!!", Toast.LENGTH_SHORT).show();
+                showDialog("Obie is a human", "Yes Siree, he a human I tell ya");
             } else {
-                Log.d("", "FAILED!!!");
-                Toast.makeText(MainActivity.this, "FAILED!!!", Toast.LENGTH_SHORT).show();
+
+                showDialog("Obie ain't a human", "No Siree, Obie ain't no human at all");
             }
         }
 
         @Override
         public void onFailure(Call<RecaptchaVerifyResponse> call, Throwable t) {
-            Log.e("", t.getMessage());
-            Log.e("", call.toString());
+            showDialog(t.getMessage(), t.getStackTrace().toString());
         }
     }
 }

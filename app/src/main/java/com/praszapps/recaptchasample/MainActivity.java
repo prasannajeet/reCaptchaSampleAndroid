@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showDialog(String title, String message) {
-        new AlertDialog.Builder(this).setTitle(title).setMessage(message).setPositiveButton("Well now ain't that nice!", null).create().show();
+        new AlertDialog.Builder(this).setTitle(title).setMessage(message).setCancelable(false).setPositiveButton("Well now ain't that nice!", null).create().show();
     }
 
     private class FailureListener implements OnFailureListener {

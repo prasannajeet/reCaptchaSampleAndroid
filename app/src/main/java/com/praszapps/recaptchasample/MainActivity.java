@@ -24,9 +24,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String SITE_KEY = "6LdvnmsUAAAAAOOqZ6iQtnl09wzbR6cdQyQnDl30";
-    private static final String PVT_KEY = "6LdvnmsUAAAAAB79MwKgMMxu0-FhZj_T6WpLoLd1";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,11 +31,36 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SafetyNet.getClient(MainActivity.this).verifyWithRecaptcha(SITE_KEY)
+                SafetyNet.getClient(MainActivity.this).verifyWithRecaptcha(getResources().getString(R.string.pubK))
                         .addOnSuccessListener(new SuccessListener())
                         .addOnFailureListener(new FailureListener());
             }
         });
+    }
+
+    private void retrofitServiceCall(String userResponseToken) {
+        RecaptchaAPI service = getService();
+
+        Map<String, String> params = new HashMap<>();
+        params.put("response", userResponseToken);
+        params.put("secret", getResources().getString(R.string.priK));
+
+        Call<RecaptchaVerifyResponse> recaptchaVerifyResponseCall = service.verifyResponse(params);
+        recaptchaVerifyResponseCall.enqueue(new ApiResponseCall());
+    }
+
+    private class SuccessListener implements OnSuccessListener<SafetyNetApi.RecaptchaTokenResponse> {
+
+        @Override
+        public void onSuccess(SafetyNetApi.RecaptchaTokenResponse recaptchaTokenResponse) {
+            {
+                // Indicates communication with reCAPTCHA service was successful.
+                String userResponseToken = recaptchaTokenResponse.getTokenResult();
+                if (!userResponseToken.isEmpty()) {
+                    retrofitServiceCall(userResponseToken);
+                }
+            }
+        }
     }
 
     private RecaptchaAPI getService() {
@@ -63,43 +85,6 @@ public class MainActivity extends AppCompatActivity {
         return interceptor;
     }
 
-    private void retrofitServiceCall(String userResponseToken) {
-        RecaptchaAPI service = getService();
-
-        Map<String, String> params = new HashMap<>();
-        params.put("response", userResponseToken);
-        params.put("secret", PVT_KEY);
-
-        Call<RecaptchaVerifyResponse> recaptchaVerifyResponseCall = service.verifyResponse(params);
-        recaptchaVerifyResponseCall.enqueue(new ApiResponseCall());
-    }
-
-    private class SuccessListener implements OnSuccessListener<SafetyNetApi.RecaptchaTokenResponse> {
-
-        @Override
-        public void onSuccess(SafetyNetApi.RecaptchaTokenResponse recaptchaTokenResponse) {
-            {
-                // Indicates communication with reCAPTCHA service was successful.
-                String userResponseToken = recaptchaTokenResponse.getTokenResult();
-                if (!userResponseToken.isEmpty()) {
-                    retrofitServiceCall(userResponseToken);
-                }
-            }
-        }
-    }
-
-    private void showDialog(String title, String message) {
-        new AlertDialog.Builder(this).setTitle(title).setMessage(message).setCancelable(false).setPositiveButton("Well now ain't that nice!", null).create().show();
-    }
-
-    private class FailureListener implements OnFailureListener {
-
-        @Override
-        public void onFailure(@NonNull Exception e) {
-            showDialog("Obie is Unknown", e.getLocalizedMessage());
-        }
-    }
-
     private class ApiResponseCall implements Callback<RecaptchaVerifyResponse> {
         @Override
         public void onResponse(Call<RecaptchaVerifyResponse> call, Response<RecaptchaVerifyResponse> response) {
@@ -115,5 +100,17 @@ public class MainActivity extends AppCompatActivity {
         public void onFailure(Call<RecaptchaVerifyResponse> call, Throwable t) {
             showDialog(t.getMessage(), t.getStackTrace().toString());
         }
+    }
+
+    private class FailureListener implements OnFailureListener {
+
+        @Override
+        public void onFailure(@NonNull Exception e) {
+            showDialog("Obie is Unknown", e.getLocalizedMessage());
+        }
+    }
+
+    private void showDialog(String title, String message) {
+        new AlertDialog.Builder(this).setTitle(title).setMessage(message).setCancelable(false).setPositiveButton("Well now ain't that nice!", null).create().show();
     }
 }

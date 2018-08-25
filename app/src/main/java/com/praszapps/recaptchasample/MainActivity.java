@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 
 import com.google.android.gms.safetynet.SafetyNet;
 import com.google.android.gms.safetynet.SafetyNetApi;
@@ -28,23 +27,16 @@ public class MainActivity extends AppCompatActivity {
     private static final String SITE_KEY = "6LdvnmsUAAAAAOOqZ6iQtnl09wzbR6cdQyQnDl30";
     private static final String PVT_KEY = "6LdvnmsUAAAAAB79MwKgMMxu0-FhZj_T6WpLoLd1";
 
-    private SuccessListener mSuccessListener = new SuccessListener();
-    private FailureListener mFailureListener = new FailureListener();
-    private ApiResponseCall mApiResponseCall = new ApiResponseCall();
-
-    private Button reCaptchaButton;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        reCaptchaButton = findViewById(R.id.button);
-        reCaptchaButton.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SafetyNet.getClient(MainActivity.this).verifyWithRecaptcha(SITE_KEY)
-                        .addOnSuccessListener(mSuccessListener)
-                        .addOnFailureListener(mFailureListener);
+                        .addOnSuccessListener(new SuccessListener())
+                        .addOnFailureListener(new FailureListener());
             }
         });
     }
@@ -79,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         params.put("secret", PVT_KEY);
 
         Call<RecaptchaVerifyResponse> recaptchaVerifyResponseCall = service.verifyResponse(params);
-        recaptchaVerifyResponseCall.enqueue(mApiResponseCall);
+        recaptchaVerifyResponseCall.enqueue(new ApiResponseCall());
     }
 
     private class SuccessListener implements OnSuccessListener<SafetyNetApi.RecaptchaTokenResponse> {

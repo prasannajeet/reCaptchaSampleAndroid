@@ -41,21 +41,20 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onSuccess(final SafetyNetApi.RecaptchaTokenResponse recaptchaTokenResponse) {
-            {
-                RecaptchaResponseViewModel mViewModel = ViewModelProviders.of(MainActivity.this).get(RecaptchaResponseViewModel.class);
-                String userResponseToken = recaptchaTokenResponse.getTokenResult();
-                if (!userResponseToken.isEmpty()) {
-                    mViewModel.getmRecaptchaObservable("https://www.google.com", userResponseToken, getApplicationContext().getString(R.string.priK)).observe(MainActivity.this, new Observer<RecaptchaVerifyResponse>() {
-                        @Override
-                        public void onChanged(@Nullable RecaptchaVerifyResponse recaptchaVerifyResponse) {
-                            if (recaptchaVerifyResponse != null && recaptchaVerifyResponse.isSuccess()) {
-                                showAlertWithButton("Obie is a human", "Yes Siree, he a human I tell ya", "Well now ain't that nice!");
-                            } else {
-                                showAlertWithButton("Obie ain't a human", "No Siree, Obie ain't no human at all", "Doggone it!");
-                            }
+
+            RecaptchaResponseViewModel mViewModel = ViewModelProviders.of(MainActivity.this).get(RecaptchaResponseViewModel.class);
+            String userResponseToken = recaptchaTokenResponse.getTokenResult();
+            if (!userResponseToken.isEmpty()) {
+                mViewModel.getmRecaptchaObservable("https://www.google.com", userResponseToken, getApplicationContext().getString(R.string.priK)).observe(MainActivity.this, new Observer<RecaptchaVerifyResponse>() {
+                    @Override
+                    public void onChanged(@Nullable RecaptchaVerifyResponse recaptchaVerifyResponse) {
+                        if (recaptchaVerifyResponse != null && recaptchaVerifyResponse.isSuccess()) {
+                            showAlertWithButton("Obie is a human", "Yes Siree, he a human I tell ya", "Well now ain't that nice!");
+                        } else {
+                            showAlertWithButton("Obie ain't a human", "No Siree, Obie ain't no human at all", "Doggone it!");
                         }
-                    });
-                }
+                    }
+                });
             }
         }
     }

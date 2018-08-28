@@ -14,7 +14,7 @@ public class RecaptchaResponseViewModel extends AndroidViewModel {
         super(application);
     }
 
-    public LiveData<RecaptchaVerifyResponse> getmRecaptchaObservable(@NonNull String response, @NonNull String key) {
-        return new RecaptchaRepository().doRecaptchaValidation(response, key);
+    public LiveData<RecaptchaVerifyResponse> getmRecaptchaObservable(@NonNull String baseUrl, @NonNull String response, @NonNull String key) {
+        return new RecaptchaRepository().doRecaptchaValidation(baseUrl, response, key);
     }
 }

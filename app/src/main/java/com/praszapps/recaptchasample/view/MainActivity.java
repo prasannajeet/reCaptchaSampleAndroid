@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 RecaptchaResponseViewModel mViewModel = ViewModelProviders.of(MainActivity.this).get(RecaptchaResponseViewModel.class);
                 String userResponseToken = recaptchaTokenResponse.getTokenResult();
                 if (!userResponseToken.isEmpty()) {
-                    mViewModel.getmRecaptchaObservable(userResponseToken, getApplicationContext().getString(R.string.priK)).observe(MainActivity.this, new Observer<RecaptchaVerifyResponse>() {
+                    mViewModel.getmRecaptchaObservable("https://www.google.com", userResponseToken, getApplicationContext().getString(R.string.priK)).observe(MainActivity.this, new Observer<RecaptchaVerifyResponse>() {
                         @Override
                         public void onChanged(@Nullable RecaptchaVerifyResponse recaptchaVerifyResponse) {
                             if (recaptchaVerifyResponse != null && recaptchaVerifyResponse.isSuccess()) {

@@ -17,12 +17,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RecaptchaRepository {
 
-    public LiveData<RecaptchaVerifyResponse> doRecaptchaValidation(String response, String key) {
+    public LiveData<RecaptchaVerifyResponse> doRecaptchaValidation(@NonNull String baseUrl, @NonNull String response, @NonNull String key) {
         final MutableLiveData<RecaptchaVerifyResponse> data = new MutableLiveData<>();
         Map<String, String> params = new HashMap<>();
         params.put("response", response);
         params.put("secret", key);
-        getRecaptchaValidationService("https://www.google.com").verifyResponse(params).enqueue(new Callback<RecaptchaVerifyResponse>() {
+        getRecaptchaValidationService(baseUrl).verifyResponse(params).enqueue(new Callback<RecaptchaVerifyResponse>() {
             @Override
             public void onResponse(Call<RecaptchaVerifyResponse> call, Response<RecaptchaVerifyResponse> response) {
                 data.setValue(response.body());

@@ -1,4 +1,4 @@
-package com.praszapps.recaptchasample;
+package com.praszapps.recaptchasample.model;
 
 public class RecaptchaVerifyResponse {
 

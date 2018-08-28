@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">reCaptcha Sample</string>
-    <string name="dialogue">"Obie - Well pa, I ain't so sure I am a human after all.\n\nSheriff Andy - Is that so? That's mighty sad Obie.\n\nObie - What do we do pa? I am too scared. I ain't want to be not human pa.\n\nSheriff Andy - Well simmer down, son. Tap this button thing below and we will find the answer to it mighty fast.\n\nObie - Okay Pa."</string>
-    <string name="btn_check_human">Obie, is you a human?</string>
+    <string name="dialogue">"Opie - Well pa, I ain't so sure I am a human after all.\n\nSheriff Andy - Is that so? That's mighty sad Opie.\n\nOpie - What do we do pa? I am too scared. I ain't want to be not human pa.\n\nSheriff Andy - Well simmer down, son. Tap this button thing below and we will find the answer to it mighty fast.\n\nOpie - Okay Pa."</string>
+    <string name="btn_check_human">Opie, is you a human?</string>
 </resources>

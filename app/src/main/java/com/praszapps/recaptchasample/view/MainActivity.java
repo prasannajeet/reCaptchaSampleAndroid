@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         public void onSuccess(final SafetyNetApi.RecaptchaTokenResponse recaptchaTokenResponse) {
             {
                 mViewModel = ViewModelProviders.of(MainActivity.this).get(RecaptchaResponseViewModel.class);
-                // Indicates communication with reCAPTCHA service was successful.
                 String userResponseToken = recaptchaTokenResponse.getTokenResult();
                 if (!userResponseToken.isEmpty()) {
                     mViewModel.getmRecaptchaObservable(userResponseToken, getApplicationContext().getString(R.string.priK)).observe(MainActivity.this, new Observer<RecaptchaVerifyResponse>() {

@@ -2,6 +2,7 @@ package com.praszapps.recaptchasample.model;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.support.annotation.NonNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,18 +17,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RecaptchaRepository {
 
-    private RecaptchaVerificationService mService;
-
-    public RecaptchaRepository() {
-        this.mService = getService();
-    }
-
     public LiveData<RecaptchaVerifyResponse> doRecaptchaValidation(String response, String key) {
         final MutableLiveData<RecaptchaVerifyResponse> data = new MutableLiveData<>();
         Map<String, String> params = new HashMap<>();
         params.put("response", response);
         params.put("secret", key);
-        mService.verifyResponse(params).enqueue(new Callback<RecaptchaVerifyResponse>() {
+        getRecaptchaValidationService("https://www.google.com").verifyResponse(params).enqueue(new Callback<RecaptchaVerifyResponse>() {
             @Override
             public void onResponse(Call<RecaptchaVerifyResponse> call, Response<RecaptchaVerifyResponse> response) {
                 data.setValue(response.body());
@@ -41,13 +36,13 @@ public class RecaptchaRepository {
         return data;
     }
 
-    private RecaptchaVerificationService getService() {
-        return getRetrofit().create(RecaptchaVerificationService.class);
+    private RecaptchaVerificationService getRecaptchaValidationService(@NonNull String baseUrl) {
+        return getRetrofit(baseUrl).create(RecaptchaVerificationService.class);
     }
 
-    private Retrofit getRetrofit() {
+    private Retrofit getRetrofit(@NonNull String baseUrl) {
         return new Retrofit.Builder()
-                .baseUrl("https://www.google.com")
+                .baseUrl(baseUrl)
                 .client(getOkHttpClient())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();

@@ -19,8 +19,6 @@ import com.praszapps.recaptchasample.viewmodel.RecaptchaResponseViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecaptchaResponseViewModel mViewModel;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onSuccess(final SafetyNetApi.RecaptchaTokenResponse recaptchaTokenResponse) {
             {
-                mViewModel = ViewModelProviders.of(MainActivity.this).get(RecaptchaResponseViewModel.class);
+                RecaptchaResponseViewModel mViewModel = ViewModelProviders.of(MainActivity.this).get(RecaptchaResponseViewModel.class);
                 String userResponseToken = recaptchaTokenResponse.getTokenResult();
                 if (!userResponseToken.isEmpty()) {
                     mViewModel.getmRecaptchaObservable(userResponseToken, getApplicationContext().getString(R.string.priK)).observe(MainActivity.this, new Observer<RecaptchaVerifyResponse>() {

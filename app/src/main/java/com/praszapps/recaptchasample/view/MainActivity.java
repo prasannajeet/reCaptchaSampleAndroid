@@ -42,9 +42,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onSuccess(final SafetyNetApi.RecaptchaTokenResponse recaptchaTokenResponse) {
 
-            RecaptchaResponseViewModel mViewModel = ViewModelProviders.of(MainActivity.this).get(RecaptchaResponseViewModel.class);
             String userResponseToken = recaptchaTokenResponse.getTokenResult();
             if (!userResponseToken.isEmpty()) {
+                RecaptchaResponseViewModel mViewModel = ViewModelProviders.of(MainActivity.this).get(RecaptchaResponseViewModel.class);
                 mViewModel.getmRecaptchaObservable("https://www.google.com", userResponseToken, getApplicationContext().getString(R.string.priK)).observe(MainActivity.this, new Observer<RecaptchaVerifyResponse>() {
                     @Override
                     public void onChanged(@Nullable RecaptchaVerifyResponse recaptchaVerifyResponse) {

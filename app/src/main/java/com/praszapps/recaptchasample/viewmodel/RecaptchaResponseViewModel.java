@@ -1,12 +1,13 @@
 package com.praszapps.recaptchasample.viewmodel;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
-import android.support.annotation.NonNull;
 
 import com.praszapps.recaptchasample.model.RecaptchaRepository;
 import com.praszapps.recaptchasample.model.RecaptchaVerifyResponse;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 public class RecaptchaResponseViewModel extends AndroidViewModel {
 

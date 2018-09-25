@@ -1,12 +1,7 @@
 package com.praszapps.recaptchasample.view;
 
 import android.app.AlertDialog;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.google.android.gms.safetynet.SafetyNet;
@@ -16,6 +11,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.praszapps.recaptchasample.R;
 import com.praszapps.recaptchasample.model.RecaptchaVerifyResponse;
 import com.praszapps.recaptchasample.viewmodel.RecaptchaResponseViewModel;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 public class MainActivity extends AppCompatActivity {
 
